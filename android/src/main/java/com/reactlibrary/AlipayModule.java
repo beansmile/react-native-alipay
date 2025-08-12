@@ -1,6 +1,8 @@
 
 package com.reactlibrary;
 
+import android.app.Activity;
+
 import com.alipay.sdk.app.EnvUtils;
 import com.alipay.sdk.app.H5PayCallback;
 import com.alipay.sdk.util.H5PayResultModel;
@@ -26,7 +28,14 @@ public class AlipayModule extends ReactContextBaseJavaModule {
 
   @Override
   public String getName() {
-    return "RCTAlipay";
+    return "Alipay";
+  }
+
+  private Activity getActivity() {
+    if (this.reactContext != null) {
+      return this.reactContext.getCurrentActivity();
+    }
+    return null;
   }
 
   @ReactMethod
@@ -34,7 +43,7 @@ public class AlipayModule extends ReactContextBaseJavaModule {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        AuthTask authTask = new AuthTask(getCurrentActivity());
+        AuthTask authTask = new AuthTask(getActivity());
         Map<String, String> map = authTask.authV2(infoStr, true);
         promise.resolve(getWritableMap(map));
       }
@@ -58,7 +67,7 @@ public class AlipayModule extends ReactContextBaseJavaModule {
     Runnable runnable = new Runnable() {
       @Override
       public void run() {
-        PayTask payTask = new PayTask(getCurrentActivity());
+        PayTask payTask = new PayTask(getActivity());
         Map<String, String> map = payTask.payV2(orderInfo, true);
         promise.resolve(getWritableMap(map));
       }
@@ -69,7 +78,7 @@ public class AlipayModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void payInterceptorWithUrl(final String h5PayUrl, final Promise promise) {
-    PayTask payTask = new PayTask(getCurrentActivity());
+    PayTask payTask = new PayTask(getActivity());
     payTask.payInterceptorWithUrl(h5PayUrl, true, new H5PayCallback() {
       @Override
       public void onPayResult(H5PayResultModel h5PayResultModel) {
@@ -83,7 +92,7 @@ public class AlipayModule extends ReactContextBaseJavaModule {
 
   @ReactMethod
   public void getVersion(Promise promise) {
-    PayTask payTask = new PayTask(getCurrentActivity());
+    PayTask payTask = new PayTask(getActivity());
     promise.resolve(payTask.getVersion());
   }
 
