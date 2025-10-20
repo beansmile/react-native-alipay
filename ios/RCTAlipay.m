@@ -84,10 +84,6 @@ RCT_EXPORT_METHOD(payInterceptorWithUrl:(NSString *)urlStr
     }];
 }
 
-RCT_EXPORT_METHOD(getVersion:(RCTPromiseResolveBlock)resolve) {
-    resolve(AlipaySDK.defaultService.currentVersion);
-}
-
 - (NSString *)appScheme {
     NSArray *urlTypes = NSBundle.mainBundle.infoDictionary[@"CFBundleURLTypes"];
     for (NSDictionary *urlType in urlTypes) {
